@@ -25,16 +25,29 @@ namespace Day01
                     if (sum > dest)
                         break;
 
-                    if (sum.Equals(dest))
+                    int k = j + 1;
+                    while(k < i)
                     {
-                        Console.WriteLine($"number 1: {input[i]}");
-                        Console.WriteLine($"number 2: {input[j]}");
+                        int sumThree = sum + input[k];
 
-                        Console.WriteLine($"multiply: {input[j] * input[i]}");
+                        if (sumThree > dest)
+                            break;
+                        if (sumThree.Equals(dest))
+                        {
+                            Console.WriteLine($"number 1: {input[i]}");
+                            Console.WriteLine($"number 2: {input[j]}");
+                            Console.WriteLine($"number 3: {input[k]}");
 
-                        i = 0;
-                        break;
+                            Console.WriteLine($"multiply: {input[j] * input[i]* input[k]}");
+
+                            i = 0;
+                            break;
+                        }
+
+                        k++;
                     }
+
+                    
                     j++;
                 }
             }
