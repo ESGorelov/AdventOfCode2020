@@ -16,7 +16,7 @@ namespace Day02
             foreach (string item in input)
             {
                 var checker = new PasswordChecker(item);
-                if (checker.IsValid())
+                if (checker.IsValidPartTwo())
                     count++;
             }
 
@@ -55,6 +55,16 @@ namespace Day02
         {
             var d = _password.ToCharArray().Count(a => a.Equals(_symbol));
             return d >= _min && d <= _max;
+        }
+        public bool IsValidPartTwo()
+        {
+            char first = _password[_min - 1];
+            char second = _password[_max - 1];
+
+            if (first.Equals(second))
+                return false;
+
+            return first.Equals(_symbol) || second.Equals(_symbol);
         }
 
         private void ParseLeftBlock(string leftBlock)
