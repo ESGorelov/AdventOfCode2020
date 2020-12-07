@@ -45,7 +45,7 @@ namespace Day02
                             s = regexCountBag.Replace(s, "").Trim();
 
                             string name = regexBagName.Match(s).Value;
-                            bag.InsideBags.Add(new BagHeaderWithCount(AllUniqueBags.GetBag(name),k));
+                            bag.InsideBags.Add(new BagHeaderWithCount(AllUniqueBags.GetBag(name), k));
                         }
                         else
                             throw new Exception($"Строка {s} имеет не верный формат");
@@ -55,14 +55,7 @@ namespace Day02
                 AllBags.Add(bag);
             }
 
-            int count = 0;
-            foreach (var item in AllBags)
-            {
-                if (SearchBag("shiny gold", item))
-                    count++;
-            }
-
-            Console.WriteLine(count);
+            Console.WriteLine(CountBag(AllUniqueBags.GetBag("shiny gold")));
 
         }
 
@@ -104,6 +97,35 @@ namespace Day02
                 }
             }
             return false;
+        }
+        private static int CountBag(IBag bag)
+        {
+            int countBags = 0;
+            AllUniqueBags.ClearUsed();
+            var queue = new Queue<Tuple<int, IBag>>();
+            foreach (var itemBag in bag.InsideBags)
+            {
+                if (!itemBag.Used)
+                {
+                    countBags += itemBag.Count;
+                    queue.Enqueue(new Tuple<int, IBag>(itemBag.Count, itemBag));
+                }
+            }
+
+            while (queue.Count > 0)
+            {
+                var qB = queue.Dequeue();
+                foreach (var itemBag in qB.Item2.InsideBags)
+                {
+                    if (!itemBag.Used)
+                    {
+                        countBags += qB.Item1 * itemBag.Count;
+                        queue.Enqueue(new Tuple<int, IBag>(qB.Item1 * itemBag.Count, itemBag));
+                    }
+                }
+            }
+
+            return countBags;
         }
     }
 
