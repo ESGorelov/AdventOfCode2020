@@ -55,10 +55,10 @@ namespace Day02
                 AllBags.Add(bag);
             }
 
-            int count = 0; ;
+            int count = 0;
             foreach (var item in AllBags)
             {
-                if (SearchBagRecursive("shiny gold", item))
+                if (SearchBag("shiny gold", item))
                     count++;
             }
 
@@ -74,7 +74,7 @@ namespace Day02
             }
         }
 
-        private static bool SearchBagRecursive(string color, IBag bag)
+        private static bool SearchBag(string color, IBag bag)
         {
             AllUniqueBags.ClearUsed();
             Queue<IBag> queue = new Queue<IBag>();
