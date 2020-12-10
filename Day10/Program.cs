@@ -40,10 +40,49 @@ namespace Day10
             count3Pulse++;
             Console.WriteLine($"Number: {count1Pulse * count3Pulse}");
 
+            #region Part 2
+            var size = input.Max() + 1;
+            bool[,] grafMatrix = new bool[size, size];
 
+            var listInput = new List<int>(input);
+            listInput.Insert(0, 0);
 
-            
+            for (int i = 0; i < listInput.Count; i++)
+            {
+                curValue = listInput[i];
 
+                foreach (var item in listInput.Where(n => n > curValue && n <= curValue + 3))
+                {
+                    grafMatrix[curValue, item] = true;
+                }
+            }
+
+            var peakIndex = new Dictionary<int, long>() { { 0, 1 } };
+            for (int k = 0; k < listInput.Count; k++)
+            {
+                int i = listInput[k];
+
+                int j = i + 1;
+                while (j <= i + 3 && j < grafMatrix.GetLength(1))
+                {
+                    if (grafMatrix[i, j])
+                    {
+                        if (peakIndex.ContainsKey(j))
+                        {
+                            peakIndex[j] += peakIndex[i];
+                        }
+                        else
+                        {
+                            peakIndex.Add(j, peakIndex[i]);
+                        }
+                    }
+                    j++;
+                }
+
+            }
+
+            Console.WriteLine($"Count Ways: {peakIndex[peakIndex.Keys.Max()]}");
+            #endregion
         }
         private static int[] ReadInput(string filePath)
         {
