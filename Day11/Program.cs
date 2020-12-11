@@ -45,11 +45,11 @@ namespace Day11
                 {
                     if (layout[i, j] == LOCK_SEAT)
                     {
-                        if (GetCountLockArrange(layout,i,j) >= 4)
+                        if (GetCountLockArrange(layout, i, j) >= 5)
                             changeState[i, j] = true;
                     }
                     else if (layout[i, j] == FREE_SEAT)
-                    {                      
+                    {
                         if (GetCountLockArrange(layout, i, j) == 0)
                             changeState[i, j] = true;
                     }
@@ -93,14 +93,30 @@ namespace Day11
             {
                 for (int q = -1; q <= 1; q++)
                 {
-                    if (i + k < 0 ||
-                        j + q < 0 ||
-                        (k == 0 && q == 0) ||
-                        (i + k >= layout.GetLength(0)) ||
-                        (j + q >= layout.GetLength(1)))
+                    if ((k == 0 && q == 0))
                         continue;
-                    if (layout[i + k, j + q] == LOCK_SEAT)
-                        countLock++;
+
+                    for (int mult = 1; ; mult++)
+                    {
+                        int newK = (mult * k);
+                        int newQ = (mult * q);
+
+                        if (i + newK < 0 ||
+                            j + newQ < 0 ||
+                            (i + newK >= layout.GetLength(0)) ||
+                            (j + newQ >= layout.GetLength(1)))
+                            break;
+
+                        if(layout[i + newK, j + newQ] == LOCK_SEAT)
+                        {
+                            countLock++;
+                            break;
+                        }
+                        if (layout[i + newK, j + newQ] == FREE_SEAT)
+                        {
+                            break;
+                        }
+                    }
                 }
             }
             return countLock;
