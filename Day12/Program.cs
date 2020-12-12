@@ -19,70 +19,58 @@ namespace Day12
                 ns.SetCommand((Command)item[0], int.Parse(item.Substring(1)));
             }
 
-            Console.WriteLine(Math.Abs(ns.NorthSouth) + Math.Abs(ns.WestEast));
+            Console.WriteLine(Math.Abs(ns.ShipNorth) + Math.Abs(ns.ShipEast));
         }
     }
 
     class NavSystem
     {
-        public Direction curDirection { get; protected set; } = Direction.East;
-        public int NorthSouth { get; protected set; } = 0;
-        public int WestEast { get; protected set; } = 0;
+        public int ShipNorth { get; protected set; } = 0;
+        public int ShipEast { get; protected set; } = 0;
+
+        public int PointNorth { get; protected set; } = 1;
+        public int PointEast { get; protected set; } = 10;
 
         public void SetCommand(Command cmd, int arg)
         {
             switch (cmd)
             {
                 case Command.N:
-                    NorthSouth += arg;
+                    PointNorth += arg;
                     break;
                 case Command.E:
-                    WestEast += arg;
+                    PointEast += arg;
                     break;
                 case Command.S:
-                    NorthSouth -= arg;
+                    PointNorth -= arg;
                     break;
                 case Command.W:
-                    WestEast -= arg;
+                    PointEast -= arg;
                     break;
                 case Command.L:
-                    curDirection = (Direction)(((int)curDirection + ((360-arg) / 90)) % 4);
+                    RotatePointToRight90((360 - arg) / 90);
                     break;
                 case Command.R:
-                    curDirection = (Direction)(((int)curDirection + (arg / 90)) % 4);
+                    RotatePointToRight90( arg / 90);
                     break;
                 case Command.F:
-                    switch (curDirection)
-                    {
-                        case Direction.East:
-                            WestEast += arg;
-                            break;
-                        case Direction.South:
-                            NorthSouth -= arg;
-                            break;
-                        case Direction.West:
-                            WestEast -= arg;
-                            break;
-                        case Direction.North:
-                            NorthSouth += arg;
-                            break;
-                        default:
-                            throw new Exception();
-                    }
+                    ShipEast += arg * PointEast;
+                    ShipNorth += arg * PointNorth;
                     break;
                 default:
                     throw new Exception();
             }
         }
-    }
 
-
-    enum Direction
-    {
-        East = 0,
-        South = 1,
-        West = 2,
-        North = 3,
+        private void RotatePointToRight90(int count)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                int temp = PointNorth;
+                PointNorth = -1 * PointEast;
+                PointEast = temp;
+            }
+        }
     }
 
     enum Command
